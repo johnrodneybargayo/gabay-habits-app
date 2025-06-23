@@ -1,28 +1,41 @@
 {
   "expo": {
-    "name": "GabayHabitsNew",
+    "name": "Gabay Habits",
     "slug": "GabayHabitsNew",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/gabayhabits.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/gabayhabits.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1b2845"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/gabayhabits.png",
+        "backgroundColor": "#1b2845"
+      },
+      "package": "com.anonymous.GabayHabitsNew"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/gabayhabits.png",
+            "./assets/favicon.png"
+          ]
+        }
+      ],
+      "expo-notifications"
+    ]
   }
 }
