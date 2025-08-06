@@ -9,17 +9,20 @@ import {
   Alert,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 import DashboardHeader from '../../components/DashboardHeader';
 import PomodoroTimer from '../../components/PomodoroTimer';
 import GroupStudyLobby from '../../components/GroupStudy/GroupStudyLobby';
 import ChatRoom from '../../components/GroupStudy/ChatRoom';
 import { useChatContext } from '../../context/ChatContext';
+import { ScheduleNavigationProp } from '../../types/navigation';
 
 import { getFirebaseAuth, getFirebaseDatabase } from '../../firebase/firebase';
 import { ref, get } from 'firebase/database';
 
 const ScheduleScreen: React.FC = () => {
+  const navigation = useNavigation<ScheduleNavigationProp>();
   const [selectedTab, setSelectedTab] = useState('Schedule');
   const [firstName, setFirstName] = useState('User');
   const [points, setPoints] = useState(0);
