@@ -3,6 +3,7 @@ const nativewindPreset = require("nativewind/preset");
 
 module.exports = {
   presets: [nativewindPreset], // ✅ Required for NativeWind
+  darkMode: 'class', // ✅ Fix for NativeWind dark mode error
   content: [
     './App.{js,jsx,ts,tsx}',
     './index.{js,jsx,ts,tsx}',

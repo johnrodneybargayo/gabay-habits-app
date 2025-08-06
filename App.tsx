@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import AppNavigator from './navigation/AppNavigator';
 import { PomodoroProvider } from './context/PomodoroContext';
+import { ChatProvider } from './context/ChatContext';
 import './global.css';
 
 const App = () => {
@@ -27,9 +28,11 @@ const App = () => {
   }, []);
 
   return (
-    <PomodoroProvider>
-      <AppNavigator />
-    </PomodoroProvider>
+    <ChatProvider>
+      <PomodoroProvider>
+        <AppNavigator />
+      </PomodoroProvider>
+    </ChatProvider>
   );
 };
 

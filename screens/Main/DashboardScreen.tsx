@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ref, get } from 'firebase/database';
 import { getFirebaseAuth, getFirebaseDatabase } from '../../firebase/firebase';
 import dashboardStyles from '../../styles/dashboardStyles';
-import DashboardHeader from '../../components/DashboardHeader'; // Make sure this path is correct
+import DashboardHeader from '../../components/DashboardHeader';
+import { DashboardNavigationProp } from '../../types/navigation';
 
 const DashboardScreen = () => {
+  const navigation = useNavigation<DashboardNavigationProp>();
   const [firstName, setFirstName] = useState('User');
   const [points, setPoints] = useState(125);
   const [streak, setStreak] = useState(3);
@@ -22,8 +25,6 @@ const DashboardScreen = () => {
         const snapshot = await get(userRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-
-      
           setFirstName(data.firstName || 'User');
           setPoints(data.points || 0);
           setStreak(data.streak || 0);
@@ -35,6 +36,46 @@ const DashboardScreen = () => {
 
     fetchUserData();
   }, []);
+
+  // Navigation handlers
+  const handleStudyModePress = (mode: string) => {
+    if (mode === 'Leitner Mode' || mode === 'Active Recall') {
+      navigation.navigate('Flashcards');
+    } else {
+      Alert.alert('Coming Soon', `${mode} will be available in future updates!`);
+    }
+  };
+
+  const handleSocialPress = (feature: string) => {
+    if (feature === 'Study Circles') {
+      navigation.navigate('Schedule');
+    } else {
+      Alert.alert('Coming Soon', `${feature} will be available in future updates!`);
+    }
+  };
+
+  const handleQuickActionPress = (action: string) => {
+    switch (action) {
+      case 'Upload Notes':
+        navigation.navigate('Notes');
+        break;
+      case 'Study Flashcards':
+        navigation.navigate('Flashcards');
+        break;
+      case 'Schedule Session':
+        navigation.navigate('Schedule');
+        break;
+      case 'Join Room':
+        navigation.navigate('Schedule');
+        break;
+      default:
+        Alert.alert('Coming Soon', `${action} will be available soon!`);
+    }
+  };
+
+  const handleAIAssistantPress = () => {
+    Alert.alert('AI Assistant', 'AI summarization and assistance features are coming soon!');
+  };
 
   return (
     <ScrollView contentContainerStyle={dashboardStyles.container}>
@@ -72,7 +113,11 @@ const DashboardScreen = () => {
           { label: 'Leitner Mode', sub: 'Spaced repetition system' },
           { label: 'Active Recall', sub: 'Timed question sessions' },
         ].map((item, i) => (
-          <TouchableOpacity key={i} style={dashboardStyles.modeItem}>
+          <TouchableOpacity 
+            key={i} 
+            style={dashboardStyles.modeItem}
+            onPress={() => handleStudyModePress(item.label)}
+          >
             <Text style={dashboardStyles.modeLabel}>{item.label}</Text>
             <Text style={dashboardStyles.modeSub}>{item.sub}</Text>
             {item.locked && <Text style={dashboardStyles.lockBadge}>Student+</Text>}
@@ -88,7 +133,11 @@ const DashboardScreen = () => {
           { label: 'Direct Messages', sub: 'Chat with friends', locked: true },
           { label: 'Study Circles', sub: 'Join temporary study groups' },
         ].map((item, i) => (
-          <TouchableOpacity key={i} style={dashboardStyles.modeItem}>
+          <TouchableOpacity 
+            key={i} 
+            style={dashboardStyles.modeItem}
+            onPress={() => handleSocialPress(item.label)}
+          >
             <Text style={dashboardStyles.modeLabel}>{item.label}</Text>
             <Text style={dashboardStyles.modeSub}>{item.sub}</Text>
             {item.locked && <Text style={dashboardStyles.lockBadge}>Student+</Text>}
@@ -101,7 +150,11 @@ const DashboardScreen = () => {
         <Text style={dashboardStyles.sectionTitle}>Quick Actions</Text>
         <View style={dashboardStyles.actionsGrid}>
           {['Upload Notes', 'Study Flashcards', 'Schedule Session', 'Join Room'].map((a, i) => (
-            <TouchableOpacity key={i} style={dashboardStyles.quickButton}>
+            <TouchableOpacity 
+              key={i} 
+              style={dashboardStyles.quickButton}
+              onPress={() => handleQuickActionPress(a)}
+            >
               <Text style={dashboardStyles.quickText}>{a}</Text>
             </TouchableOpacity>
           ))}
@@ -112,7 +165,10 @@ const DashboardScreen = () => {
       <View style={dashboardStyles.section}>
         <Text style={dashboardStyles.sectionTitle}>AI Assistant</Text>
         <Text style={dashboardStyles.aiAccessText}>Current AI Access: basic</Text>
-        <TouchableOpacity style={dashboardStyles.aiButton}>
+        <TouchableOpacity 
+          style={dashboardStyles.aiButton}
+          onPress={handleAIAssistantPress}
+        >
           <Text style={dashboardStyles.aiButtonText}>Summarization</Text>
         </TouchableOpacity>
       </View>

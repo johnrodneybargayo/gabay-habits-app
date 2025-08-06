@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ref, get } from 'firebase/database';
-import { auth, database } from '../services/firebase';
+import { getFirebaseAuth, getFirebaseDatabase } from '../firebase/firebase';
 
 const useFirebaseData = () => {
   const [userData, setUserData] = useState<any | null>(null);
@@ -9,6 +9,8 @@ const useFirebaseData = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const auth = getFirebaseAuth();
+      const database = getFirebaseDatabase();
       if (auth.currentUser) {
         const userId = auth.currentUser.uid;
         try {

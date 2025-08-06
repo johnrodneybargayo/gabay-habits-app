@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ref, push, update, remove } from 'firebase/database';
-import { auth, database } from '../services/firebase';
+import { getFirebaseAuth, getFirebaseDatabase } from '../firebase/firebase';
 
 const useHabitManagement = () => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +16,8 @@ const useHabitManagement = () => {
   };
 
   const addHabit = async (habit: any) => {
+    const auth = getFirebaseAuth();
+    const database = getFirebaseDatabase();
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
@@ -32,6 +34,8 @@ const useHabitManagement = () => {
   };
 
   const updateHabit = async (habitId: string, updatedHabit: any) => {
+    const auth = getFirebaseAuth();
+    const database = getFirebaseDatabase();
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
@@ -48,6 +52,8 @@ const useHabitManagement = () => {
   };
 
   const deleteHabit = async (habitId: string) => {
+    const auth = getFirebaseAuth();
+    const database = getFirebaseDatabase();
     if (auth.currentUser) {
       const userId = auth.currentUser.uid;
       try {
