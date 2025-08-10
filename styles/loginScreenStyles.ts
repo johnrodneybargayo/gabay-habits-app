@@ -46,6 +46,34 @@ const loginScreenStyles = StyleSheet.create({
     fontSize: 14,
     textDecorationLine: 'underline',
   },
+  rememberMeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  rememberMeText: {
+    color: '#fff',
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  googleButton: {
+    backgroundColor: '#fff',
+    width: '80%',
+    height: 50,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  googleButtonText: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default loginScreenStyles;

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridge Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .log { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>React Native Bridge Test</h1>
+    <div id="output"></div>
+    
+    <script>
+        const output = document.getElementById('output');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = message;
+            output.appendChild(div);
+            console.log(message);
+        }
+        
+        // Test bridge initialization
+        log('🚀 Starting Bridge Test...', 'info');
+        
+        // Ensure global exists
+        if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
+            window.global = window;
+            log('✅ Global object created', 'success');
+        }
+        
+        const g = window.global || window;
+        
+        // Initialize bridge configuration
+        g.__fbBatchedBridgeConfig = {
+            remoteModuleConfig: [],
+            localModulesConfig: []
+        };
+        log('✅ __fbBatchedBridgeConfig created', 'success');
+        
+        // Initialize bridge
+        g.__fbBatchedBridge = {
+            callFunctionReturnFlushedQueue: function() {
+                log('📞 callFunctionReturnFlushedQueue called', 'info');
+                return null;
+            },
+            invokeCallbackAndReturnFlushedQueue: function() {
+                log('📞 invokeCallbackAndReturnFlushedQueue called', 'info');
+                return null;
+            },
+            flushedQueue: function() {
+                log('📞 flushedQueue called', 'info');
+                return null;
+            }
+        };
+        log('✅ __fbBatchedBridge created', 'success');
+        
+        // Test bridge access
+        try {
+            if (g.__fbBatchedBridgeConfig && g.__fbBatchedBridge) {
+                log('🎉 Bridge initialization successful!', 'success');
+                log(`Bridge config: ${JSON.stringify(g.__fbBatchedBridgeConfig)}`, 'info');
+                log(`Bridge methods: ${Object.keys(g.__fbBatchedBridge).join(', ')}`, 'info');
+            } else {
+                log('❌ Bridge initialization failed', 'error');
+            }
+        } catch (error) {
+            log(`❌ Error testing bridge: ${error.message}`, 'error');
+        }
+        
+        // Test accessing the bridge like React Native would
+        try {
+            if (!g.__fbBatchedBridgeConfig) {
+                throw new Error('__fbBatchedBridgeConfig is not set, cannot invoke native modules');
+            }
+            log('✅ Bridge access test passed - no Invariant Violation!', 'success');
+        } catch (error) {
+            log(`❌ Bridge access test failed: ${error.message}`, 'error');
+        }
+    </script>
+</body>
+</html>

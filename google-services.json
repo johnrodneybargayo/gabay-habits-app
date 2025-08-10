@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "536095374999",
+    "firebase_url": "https://gabayhabits-default-rtdb.firebaseio.com",
+    "project_id": "gabayhabits",
+    "storage_bucket": "gabayhabits.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536095374999:android:d5593e19adad00b92473d2",
+        "android_client_info": {
+          "package_name": "com.auracreo.gabayhabits"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536095374999-uieb6gblp2nmupum73qqboqafpu9nful.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.auracreo.gabayhabits",
+            "certificate_hash": "49083e212552d1c48d567a2caa17797ab59616df"
+          }
+        },
+        {
+          "client_id": "536095374999-9q6cqja7i2f7ia279eohlpghcgos3bcn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPjjt7U2IfpNcdEiDV4fFslLttmQdPr7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536095374999-9q6cqja7i2f7ia279eohlpghcgos3bcn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

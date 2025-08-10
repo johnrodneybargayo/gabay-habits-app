@@ -10,7 +10,25 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Image } from 'expo-image';
+// Temporary web-compatible Image component
+interface ImageProps {
+  source: { uri: string };
+  style: any;
+  contentFit: string;
+}
+
+const Image: React.FC<ImageProps> = ({ source, style, contentFit }) => {
+  return (
+    <img
+      src={source.uri}
+      style={{
+        ...style,
+        objectFit: contentFit === 'contain' ? 'contain' : 'cover',
+      }}
+      alt="App Icon"
+    />
+  );
+};
 import { getFirebaseAuth } from '../../firebase/firebase';
 import registerScreenStyles from '../../styles/registerScreenStyles';
 
