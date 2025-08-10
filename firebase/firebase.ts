@@ -36,8 +36,14 @@ const database = firebase.database(); // ✅ You can save username here
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 
+// Configure Google Auth Provider
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
+
 export const getFirebaseApp = () => firebase.app();
 export const getFirebaseAuth = () => auth;
 export const getFirebaseDatabase = () => database;
 export const getFirebaseFirestore = () => firestore;
 export const getFirebaseStorage = () => storage;
+export const getGoogleProvider = () => googleProvider;

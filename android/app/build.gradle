@@ -151,6 +151,9 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-splash-screen')
+    
+    // Google Play Services for Google Sign-In
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
@@ -178,3 +181,6 @@ dependencies {
 
     
 }
+
+// Apply Google Services plugin for Firebase and Google Sign-In
+apply plugin: 'com.google.gms.google-services'

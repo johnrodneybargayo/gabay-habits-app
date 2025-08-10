@@ -8,6 +8,8 @@ import {
   Switch,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Platform } from 'react-native';
 // Temporary web-compatible Image component
 interface ImageProps {
   source: { uri: string };
@@ -28,8 +30,9 @@ const Image: React.FC<ImageProps> = ({ source, style, contentFit }) => {
   );
 };
 import loginScreenStyles from '../../styles/loginScreenStyles';
-import { getFirebaseAuth, getFirebaseDatabase } from '../../firebase/firebase';
+import { getFirebaseAuth, getFirebaseDatabase, getGoogleProvider } from '../../firebase/firebase';
 import { ref, get } from 'firebase/database';
+import firebase from 'firebase/compat/app';
 
 interface Props {
   navigation: {
@@ -42,10 +45,25 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Load saved credentials on component mount
+  // Load saved credentials and configure Google Sign-In on component mount
   useEffect(() => {
     loadSavedCredentials();
+    configureGoogleSignIn();
   }, []);
+
+  const configureGoogleSignIn = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        // Configure Google Sign-In for Android
+         await GoogleSignin.configure({
+           webClientId: '536095374999-9q6cqja7i2f7ia279eohlpghcgos3bcn.apps.googleusercontent.com',
+           offlineAccess: true,
+         });
+      }
+    } catch (error) {
+       console.log('Google Sign-In configuration error:', error);
+     }
+   };
 
   const loadSavedCredentials = async () => {
     try {
@@ -132,16 +150,49 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      Alert.alert('Google Sign-In', 'Google Sign-In functionality will be implemented here. This requires additional setup with Google OAuth and Firebase configuration.');
-      // TODO: Implement Google Sign-In
-      // This would typically involve:
-      // 1. Setting up Google OAuth credentials
-      // 2. Using @react-native-google-signin/google-signin or similar
-      // 3. Integrating with Firebase Auth
+      const auth = getFirebaseAuth();
+      const googleProvider = getGoogleProvider();
+
+      if (Platform.OS === 'web') {
+        // Web platform - use Firebase popup
+        const result = await auth.signInWithPopup(googleProvider);
+        const user = result.user;
+        
+        if (user) {
+          Alert.alert('Success', `Welcome ${user.displayName}!`);
+          navigation.navigate('Main', { screen: 'Dashboard' });
+        }
+      } else {
+        // Android platform - use Google Sign-In SDK
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        
+        // Create Firebase credential
+        const googleCredential = firebase.auth.GoogleAuthProvider.credential(
+          userInfo.idToken,
+          userInfo.accessToken
+        );
+        
+        // Sign in with Firebase
+        const result = await auth.signInWithCredential(googleCredential);
+        const user = result.user;
+        
+        if (user) {
+          Alert.alert('Success', `Welcome ${user.displayName}!`);
+          navigation.navigate('Main', { screen: 'Dashboard' });
+        }
+      }
     } catch (error: any) {
-      Alert.alert('Google Sign-In Error', error.message || 'Something went wrong.');
-    }
-  };
+      console.log('Google Sign-In Error:', error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        Alert.alert('Sign-In Cancelled', 'Google Sign-In was cancelled.');
+      } else if (error.code === 'auth/network-request-failed') {
+        Alert.alert('Network Error', 'Please check your internet connection.');
+      } else {
+         Alert.alert('Google Sign-In Error', error.message || 'Something went wrong.');
+       }
+     }
+   };
 
   return (
     <View style={loginScreenStyles.container}>

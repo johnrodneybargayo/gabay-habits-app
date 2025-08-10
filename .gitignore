@@ -30,7 +30,21 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+
+# Firebase and Google Services
+google-services.json
+GoogleService-Info.plist
+
+# Credentials
+credentials.json
+credentials/
+
+# Build outputs
+build/
+android/app/build/
+ios/build/
 
 # typescript
 *.tsbuildinfo
